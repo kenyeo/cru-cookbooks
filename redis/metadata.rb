@@ -1,25 +1,19 @@
-name "redis"
-maintainer       "Miah Johnson"
-maintainer_email "miah@cx.com"
-license          "Apache 2.0"
-description      "Installs/configures redis"
+name             'redisio'
+maintainer       'Brian Bianco'
+maintainer_email 'brian.bianco@gmail.com'
+license          'Apache 2.0'
+description      'Installs/Configures redis'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.1.0"
-
-recipe "redis::default", "The default recipe does nothing. Used to include only the LWRP"
-recipe "redis::data_bag", "The recipe to create multiple redis instances from data_bags using the LWRP."
-recipe "redis::server", "The default recipe executes the redis::server_package recipe. This recipe is here for compatibility with other community Redis cookbooks."
-recipe "redis::server_package", "Uses the recipe crumbs in the Redis cookbook to manage a packaged Redis instance."
-recipe "redis::server_source", "Uses the recipe crumbs in the Redis cookbook to manage a source compiled Redis instance."
-recipe "redis::sentinel", "Setup sentinel for monitoring cluster"
-
-%w[ ubuntu centos ].each do |os|
+version          '1.4.2'
+%w[ debian ubuntu centos redhat fedora scientific suse amazon].each do |os|
   supports os
 end
 
-%w[ build-essential runit yum ].each do |cookbook|
-  depends cookbook
-end
+recipe "redisio::default", "This recipe is used to install the prequisites for building and installing redis, as well as provides the LWRPs"
+recipe "redisio::install", "This recipe is used to install redis and create the configuration files and init scripts"
+recipe "redisio::uninstall", "This recipe is used to uninstall the redis binaries as well as optionally the configuration files and init scripts"
+recipe "redisio::enable", "This recipe is used to start the redis instances and enable them in the default run levels"
+recipe "redisio::disable", "this recipe is used to stop the redis instances and disable them in the default run levels"
+recipe "redisio::redis_gem", "this recipe will install the redis ruby gem into the system ruby"
 
-depends 'stunnel', '>= 2.0.0'   # replication
-depends 'discovery', '>= 0.2.0' # replication
+depends "ulimit", ">= 0.1.2"

@@ -1,9 +1,7 @@
+# Cookbook Name:: redisio
+# Attribute::default
 #
-# Cookbook Name:: redis
-# Attributes:: default
-#
-# Copyright 2010, Atari, Inc
-# Copyright 2012, CX, Inc
+# Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,43 +16,72 @@
 # limitations under the License.
 #
 
-# installation
-default.redis.install_type   = "package"
-default.redis.source.sha     = "b0644669849a130659cf8dd48965cf116e4fe64a5bb86a239ea078d7464b6968"
-default.redis.source.url     = "http://redis.googlecode.com/files"
-default.redis.source.version = "2.6.11"
-default.redis.src_dir    = "/usr/src/redis"
-default.redis.dst_dir    = "/opt/redis"
-default.redis.conf_dir   = "/etc/redis"
-default.redis.init_style = "init"
-default.redis.symlink_binaries = false
+case node['platform']
+when 'ubuntu','debian'
+  shell = '/bin/false'
+  homedir = '/var/lib/redis'
+when 'centos','redhat','scientific','amazon','suse'
+  shell = '/bin/sh'
+  homedir = '/var/lib/redis' 
+when 'fedora'
+  shell = '/bin/sh'
+  homedir = '/home' #this is necessary because selinux by default prevents the homedir from being managed in /var/lib/ 
+else
+  shell = '/bin/sh'
+  homedir = '/redis'
+end
 
-# service user & group
-default.redis.user  = "redis"
-default.redis.group = "redis"
+#Install related attributes
+default['redisio']['safe_install'] = true
 
-###
-## the following configuration settings may only work with a recent redis release
-###
-default.redis.config.configure_slowlog       = false
-default.redis.config.slowlog_log_slower_than = 10000
-default.redis.config.slowlog_max_len         = 1024
+#Tarball and download related defaults
+default['redisio']['mirror'] = "https://redis.googlecode.com/files"
+default['redisio']['base_name'] = 'redis-'
+default['redisio']['artifact_type'] = 'tar.gz'
+default['redisio']['version'] = '2.6.11'
+default['redisio']['base_piddir'] = '/var/run/redis'
 
-default.redis.config.configure_maxmemory_samples = false
-default.redis.config.maxmemory_samples = 3
+#Default settings for all redis instances, these can be overridden on a per server basis in the 'servers' hash
+default['redisio']['default_settings'] = {
+  'user'                   => 'redis',
+  'group'                  => 'redis',
+  'homedir'                => homedir,
+  'shell'                  => shell,
+  'systemuser'             => true,
+  'ulimit'                 => 0,
+  'configdir'              => '/etc/redis',
+  'name'                   => nil,
+  'address'                => nil,
+  'databases'              => '16',
+  'backuptype'             => 'rdb',
+  'datadir'                => '/var/lib/redis',
+  'unixsocket'             => nil,
+  'unixsocketperm'         => nil,
+  'timeout'                => '0',
+  'loglevel'               => 'verbose',
+  'logfile'                => nil,
+  'syslogenabled'          => 'yes',
+  'syslogfacility'         => 'local0',
+  'shutdown_save'          => false,
+  'save'                   => nil, # Defaults to ['900 1','300 10','60 10000'] inside of template.  Needed due to lack of hash subtraction
+  'slaveof'                => nil,
+  'job_control'            => 'initd', 
+  'masterauth'             => nil,
+  'slaveservestaledata'    => 'yes',
+  'replpingslaveperiod'    => '10',
+  'repltimeout'            => '60',
+  'requirepass'            => nil,
+  'maxclients'             => 10000,
+  'maxmemory'              => nil,
+  'maxmemorypolicy'        => 'volatile-lru',
+  'maxmemorysamples'       => '3',
+  'appendfsync'            => 'everysec',
+  'noappendfsynconrewrite' => 'no',
+  'aofrewritepercentage'   => '100',
+  'aofrewriteminsize'      => '64mb',
+  'includes'               => nil
+}
 
-default.redis.config.configure_no_appendfsync_on_rewrite = false
-default.redis.config.no_appendfsync_on_rewrite = false
+# The default for this is set inside of the "install" recipe. This is due to the way deep merge handles arrays
+default['redisio']['servers'] = nil
 
-default.redis.config.configure_list_max_ziplist = false
-default.redis.config.list_max_ziplist_entries = 512
-default.redis.config.list_max_ziplist_value   = 64
-
-default.redis.config.configure_set_max_intset_entries = false
-default.redis.config.set_max_intset_entries = 512
-
-# replication
-default.redis.replication.enabled = false
-default.redis.replication.redis_replication_role = 'master' # or slave
-default.redis.replication.tunnel.enabled = false
-default.redis.replication.tunnel.accept_port = 46379

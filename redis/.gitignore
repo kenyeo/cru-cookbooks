@@ -1,9 +1,4 @@
-.bundle
-.cache
-.kitchen
-bin
-.jamie/
-.jamie.local.yml
-.vagrant
-tmp/
-Gemfile.lock
+.DS_Store
+*swp
+*swo
+metadata.json

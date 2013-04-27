@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: redisio
-# Recipe:: default
+# Recipe:: redis_gem
 #
 # Copyright 2013, Brian Bianco <brian.bianco@gmail.com>
 #
@@ -17,18 +17,7 @@
 # limitations under the License.
 #
 
-case node.platform
-when 'debian','ubuntu'
-  %w[tar build-essential].each do |pkg|
-    package pkg do
-      action :install
-    end
-  end
-when 'redhat','centos','fedora','scientific','suse','amazon'
-  %w[tar make automake gcc].each do |pkg|
-    package pkg do
-      action :install
-      end
-  end
-end
-
+gem_package node['redisio']['gem']['name'] do
+  version node['redisio']['gem']['version'] unless node['redisio']['gem']['version'].nil?  
+  action :install 
+end 

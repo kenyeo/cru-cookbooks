@@ -66,3 +66,5 @@ end
 
 node.set['redisio']['servers'] = redis_instances
 
+include_recipe "redisio::enable"
+

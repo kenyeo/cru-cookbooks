@@ -22,10 +22,10 @@ when 'ubuntu','debian'
   homedir = '/var/lib/redis'
 when 'centos','redhat','scientific','amazon','suse'
   shell = '/bin/sh'
-  homedir = '/var/lib/redis' 
+  homedir = '/var/lib/redis'
 when 'fedora'
   shell = '/bin/sh'
-  homedir = '/home' #this is necessary because selinux by default prevents the homedir from being managed in /var/lib/ 
+  homedir = '/home' #this is necessary because selinux by default prevents the homedir from being managed in /var/lib/
 else
   shell = '/bin/sh'
   homedir = '/redis'
@@ -48,7 +48,7 @@ default['redisio']['default_settings'] = {
   'homedir'                => homedir,
   'shell'                  => shell,
   'systemuser'             => true,
-  'ulimit'                 => 0,
+  #'ulimit'                 => 0,
   'configdir'              => '/etc/redis',
   'name'                   => nil,
   'address'                => nil,
@@ -65,7 +65,7 @@ default['redisio']['default_settings'] = {
   'shutdown_save'          => false,
   'save'                   => nil, # Defaults to ['900 1','300 10','60 10000'] inside of template.  Needed due to lack of hash subtraction
   'slaveof'                => nil,
-  'job_control'            => 'initd', 
+  'job_control'            => 'initd',
   'masterauth'             => nil,
   'slaveservestaledata'    => 'yes',
   'replpingslaveperiod'    => '10',

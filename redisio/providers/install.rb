@@ -83,7 +83,7 @@ def configure
       maxmemory = (node_memory_kb * 1024 * percent_factor / new_resource.servers.length).to_i
     end
 
-    descriptors = current['ulimit'] == 0 ? current['maxclients'] + 32 : current['maxclients']
+    #descriptors = current['ulimit'] == 0 ? current['maxclients'] + 32 : current['maxclients']
 
     recipe_eval do
       server_name = current['name'] || current['port']
@@ -157,11 +157,11 @@ def configure
         only_if { ::File.exists?(rdb_file) }
       end
       #Setup the redis users descriptor limits
-      if current['ulimit']
-        user_ulimit current['user'] do
-          filehandle_limit descriptors
-        end
-      end
+      #if current['ulimit']
+        #user_ulimit current['user'] do
+          #filehandle_limit descriptors
+        #end
+      #end
       #Lay down the configuration files for the current instance
       template "#{current['configdir']}/#{server_name}.conf" do
         source 'redis.conf.erb'

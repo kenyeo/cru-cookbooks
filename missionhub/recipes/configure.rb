@@ -11,7 +11,7 @@ node[:deploy].each do |application, deploy|
 
   template "#{deploy[:deploy_to]}/shared/config/config.yml" do
     source "config.yml.erb"
-    cookbook 'mpdx'
+    cookbook 'missionhub'
     mode "0660"
     group deploy[:group]
     owner deploy[:user]

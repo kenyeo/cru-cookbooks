@@ -1,8 +1,15 @@
-directory "/var/bluepill" do
-  owner "deploy"
-  group "deploy"
-  mode 0755
-  recursive true
-end
+include_recipe "deploy"
 
-execute "touch /var/log/bluepill.log; chown deploy:deploy /var/log/bluepill.log"
+node[:deploy].each do |application, deploy|
+  deploy = node[:deploy][application]
+
+  directory "/var/bluepill" do
+    owner deploy[:user]
+    group deploy[:group]
+    mode 0755
+    recursive true
+  end
+
+  execute "touch /var/log/bluepill.log; chown #{deploy[:user]}:#{deploy[:group]} /var/log/bluepill.log"
+
+end

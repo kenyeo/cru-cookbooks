@@ -38,9 +38,9 @@ define :resque_config,
       backup false
     end
 
-    execute "Ensuring bluepill is monitoring resque" do
-      command %Q{
-        bluepill load #{path}/shared/resque.pill
-      }
-    end
+    #execute "Ensuring bluepill is monitoring resque" do
+      #command %Q{
+        #bundle exec bluepill load #{path}/shared/resque.pill
+      #}
+    #end
 end

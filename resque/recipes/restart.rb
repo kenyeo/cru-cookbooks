@@ -10,9 +10,15 @@ node[:deploy].each do |application, deploy|
     bundler true
   end
 
+  execute "load bluepill file for #{application}" do
+    cwd deploy[:current_path]
+    command "bundle exec bluepill load #{path}/shared/resque.pill"
+    action :nothing
+  end
+
   execute "restart resque for #{application}" do
     cwd deploy[:current_path]
-    command "bluepill restart resque"
+    command "bundle exec bluepill restart resque"
     action :nothing
   end
 

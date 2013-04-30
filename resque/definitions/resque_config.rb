@@ -38,11 +38,9 @@ define :resque_config,
       backup false
     end
 
-    # We're not setting up Resque this way
-    # because our projects use different rubies and specify their gems via Bundler
-    # execute "Ensuring bluepill is monitoring resque" do
-    #   command %Q{
-    #     bluepill load #{app_path}/shared/resque.pill
-    #   }
-    # end
+    execute "Ensuring bluepill is monitoring resque" do
+      command %Q{
+        bluepill load #{path}/shared/resque.pill
+      }
+    end
 end

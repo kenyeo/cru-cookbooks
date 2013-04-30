@@ -2,7 +2,6 @@ include_recipe "deploy"
 
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application] || {}
-  bluepill = deploy[application][:bluepill] || {}
 
   resque_config application do
     path deploy[:deploy_to]

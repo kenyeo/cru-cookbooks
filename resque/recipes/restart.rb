@@ -2,12 +2,14 @@ include_recipe "deploy"
 
 node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
+  bluepill = deploy[application][:bluepill] || {}
 
-  resque_config do
+  resque_config application do
     path deploy[:deploy_to]
     owner deploy[:user]
     group deploy[:group]
     bundler true
+    envs [deploy[:rails_env]]
   end
 
   execute "load bluepill file for #{application}" do

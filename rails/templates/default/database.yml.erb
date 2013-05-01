@@ -9,3 +9,12 @@
   reconnect: <%= @database[:reconnect] ? 'true' : 'false' %>
 
 <% end -%>
+
+uscm:
+  adapter: mysql2
+  host: db1.uscm.org
+  database: prod
+  username: istprod
+  password: <%= @database[:uscm_password] %>
+  reconnect: true
+  encoding: utf8

@@ -1,10 +1,6 @@
 include_recipe "deploy"
 
 node[:deploy].each do |application, deploy|
-  #hostsfile_entry '10.249.36.212' do
-    #hostname  'redis'
-    #action    :create_if_missing
-  #end
 
 
   execute "restart Rails app #{application}" do

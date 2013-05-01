@@ -13,7 +13,7 @@ node[:deploy].each do |application, deploy|
 
   execute "load bluepill file for #{application}" do
     cwd deploy[:current_path]
-    command "bundle exec bluepill load #{path}/shared/resque.pill"
+    command "bundle exec bluepill load #{deploy[:deploy_to]}/shared/resque.pill"
     action :run
   end
 

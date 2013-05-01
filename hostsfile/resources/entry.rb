@@ -22,7 +22,7 @@
 actions :create, :create_if_missing, :append, :update, :remove
 
 # Make create the default action
-default_action :create
+#default_action :create
 
 # Required attributes
 attribute :ip_address, :kind_of => String, :name_attribute => true

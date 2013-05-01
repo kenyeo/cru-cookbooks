@@ -14,13 +14,13 @@ node[:deploy].each do |application, deploy|
   execute "load bluepill file for #{application}" do
     cwd deploy[:current_path]
     command "bundle exec bluepill load #{path}/shared/resque.pill"
-    action :nothing
+    action :run
   end
 
   execute "restart resque for #{application}" do
     cwd deploy[:current_path]
     command "bundle exec bluepill restart resque"
-    action :nothing
+    action :run
   end
 
 end

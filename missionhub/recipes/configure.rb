@@ -20,17 +20,17 @@ node[:deploy].each do |application, deploy|
 
   Chef::Log.info("Running deploy/before_migrate.rb...")
 
-  Chef::Log.info("Symlinking #{deploy[:current_path]}/public/assets to #{new_resource.deploy_to}/shared/assets")
+  Chef::Log.info("Symlinking #{deploy[:current_path]}/public/assets to #{deploy[:deploy_to]}/shared/assets")
 
-  directory "#{new_resource.deploy_to}/shared/assets" do
+  directory "#{deploy[:deploy_to]}/shared/assets" do
     action :create
   end
 
   link "#{deploy[:current_path]}/public/assets" do
-    to "#{new_resource.deploy_to}/shared/assets"
+    to "#{deploy[:deploy_to]}/shared/assets"
   end
 
-  rails_env = new_resource.environment["RAILS_ENV"]
+  rails_env = deploy[:rails_env]
   Chef::Log.info("Precompiling assets for RAILS_ENV=#{rails_env}...")
 
   execute "rake assets:precompile" do

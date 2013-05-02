@@ -1,4 +1,6 @@
 include_recipe "deploy"
+include_recipe "nginx:stop"
+include_recipe "unicorn:stop"
 
 node[:deploy].each do |application, deploy|
   bluepill = deploy[:bluepill] || {}

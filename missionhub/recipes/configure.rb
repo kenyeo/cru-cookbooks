@@ -23,6 +23,8 @@ node[:deploy].each do |application, deploy|
   Chef::Log.info("Symlinking #{deploy[:current_path]}/public/assets to #{deploy[:deploy_to]}/shared/assets")
 
   directory "#{deploy[:deploy_to]}/shared/assets" do
+    group deploy[:group]
+    owner deploy[:user]
     action :create
   end
 
@@ -35,7 +37,7 @@ node[:deploy].each do |application, deploy|
 
   execute "rake assets:precompile" do
     cwd deploy[:current_path]
-    command "bundle exec rake assets:precompile"
+    command "bundle exec rake assets:precompile; chown -R #{deploy[:user]}.#{deploy[:group]} #{deploy[:deploy_to]}/shared/assets"
     environment "RAILS_ENV" => rails_env
     action :run
   end

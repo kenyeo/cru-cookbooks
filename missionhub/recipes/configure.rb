@@ -39,7 +39,7 @@ node[:deploy].each do |application, deploy|
     cwd deploy[:current_path]
     command "bundle exec rake assets:precompile;
             chown -R #{deploy[:user]}.#{deploy[:group]} #{deploy[:deploy_to]}/shared/assets;
-            chown -R #{deploy[:user]}.#{deploy[:group]} #{deploy[:current_path]}"
+            chown -R #{deploy[:user]}.#{deploy[:group]} #{deploy[:release_path]}"
     environment "RAILS_ENV" => rails_env
     action :run
   end

@@ -26,7 +26,7 @@ when "debian"
   when node['platform_version'].to_f < 7.0 # All 6.X
     default['postgresql']['version'] = "8.4"
   else
-    default['postgresql']['version'] = "9.1"
+    default['postgresql']['version'] = "9.2"
   end
 
   default['postgresql']['dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
@@ -37,9 +37,9 @@ when "debian"
     default['postgresql']['server']['service_name'] = "postgresql"
   end
 
-  default['postgresql']['client']['packages'] = %w{postgresql-client libpq-dev}
-  default['postgresql']['server']['packages'] = %w{postgresql}
-  default['postgresql']['contrib']['packages'] = %w{postgresql-contrib}
+  default['postgresql']['client']['packages'] = %w{postgresql-client-9.2 libpq-dev}
+  default['postgresql']['server']['packages'] = %w{postgresql-9.2}
+  default['postgresql']['contrib']['packages'] = %w{postgresql-contrib-9.2}
 
 when "ubuntu"
 
@@ -49,7 +49,7 @@ when "ubuntu"
   when node['platform_version'].to_f <= 11.04
     default['postgresql']['version'] = "8.4"
   else
-    default['postgresql']['version'] = "9.1"
+    default['postgresql']['version'] = "9.2"
   end
 
   default['postgresql']['dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
@@ -60,9 +60,9 @@ when "ubuntu"
     default['postgresql']['server']['service_name'] = "postgresql"
   end
 
-  default['postgresql']['client']['packages'] = %w{postgresql-client libpq-dev}
-  default['postgresql']['server']['packages'] = %w{postgresql}
-  default['postgresql']['contrib']['packages'] = %w{postgresql-contrib}
+  default['postgresql']['client']['packages'] = %w{postgresql-client-9.2 libpq-dev}
+  default['postgresql']['server']['packages'] = %w{postgresql-9.2}
+  default['postgresql']['contrib']['packages'] = %w{postgresql-contrib-9.2}
 
 when "fedora"
 
@@ -181,7 +181,7 @@ default['postgresql']['pg_hba'] = [
 
 default['postgresql']['password'] = Hash.new
 
-default['postgresql']['enable_pitti_ppa'] = false
+default['postgresql']['enable_pitti_ppa'] = true
 default['postgresql']['enable_pgdg_yum'] = false
 
 # The PostgreSQL RPM Building Project built repository RPMs for easy
@@ -410,4 +410,3 @@ default['postgresql']['pgdg']['repo_rpm_url'] = {
     }
   },
 };
-

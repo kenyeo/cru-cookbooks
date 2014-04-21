@@ -5,10 +5,10 @@
 
 
 default['jboss']['home'] = "/srv/jboss"
-default['jboss']['path'] = "wildfly-8.0.0.CR1"
-default['jboss']['version'] = "8.0.0"
-default['jboss']['url'] = "http://download.jboss.org/wildfly/8.0.0.CR1/wildfly-8.0.0.CR1.zip" 
-default['jboss']['tarball'] = "wildfly-8.0.0.CR1.zip"
+default['jboss']['path'] = "jboss-as-7.1.1.Final"
+default['jboss']['version'] = "7.1.1"
+default['jboss']['url'] = "http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip" 
+default['jboss']['tarball'] = "jboss-as-7.1.1.Final.zip"
 default['jboss']['user'] = "jboss"
 default['jboss']['application'] = 'jboss'
 default['jboss']['config'] = 'standalone'

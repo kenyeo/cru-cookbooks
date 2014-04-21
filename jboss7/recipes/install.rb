@@ -80,7 +80,7 @@ end
 
 bash "owner" do
   code <<-EOH
-  chown -R jboss:jboss /usr/local/jboss-8.0.0
+  chown -R jboss:jboss /usr/local/jboss*
   EOH
 end
 

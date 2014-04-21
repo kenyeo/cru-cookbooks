@@ -76,3 +76,4 @@ execute "passenger_module" do
   creates node[:passenger][:module_path]
   notifies :restart, "service[apache2]"
 end
+

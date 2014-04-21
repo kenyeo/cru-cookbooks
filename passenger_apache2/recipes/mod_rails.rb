@@ -62,3 +62,4 @@ end
 apache_module 'passenger' do
   module_path node[:passenger][:module_path]
 end
+

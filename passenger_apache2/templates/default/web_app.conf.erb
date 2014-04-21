@@ -25,6 +25,9 @@ PassengerPreStart http://<%= @params[:server_name] %>/
     PassengerMinInstances <%= node[:deploy][@application_name][:passenger_min_instances] || default_min_instances %>
   <% end %>
 
+  PassengerRollingRestarts on
+  PassengerResistDeploymentErrors on
+
   <Directory <%= @params[:docroot] %>>
     Options FollowSymLinks
     AllowOverride All
@@ -142,3 +145,4 @@ PassengerPreStart http://<%= @params[:server_name] %>/
   <% end %>
 </VirtualHost>
 <% end -%>
+

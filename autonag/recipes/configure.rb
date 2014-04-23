@@ -36,6 +36,15 @@ node[:deploy].each do |application, deploy|
     owner deploy[:user]
   end
 
+  template "#{deploy[:deploy_to]}/shared/config/secrets.yml" do
+    source "secrets.yml.erb"
+    cookbook 'autonag'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:secrets => deploy[:secrets], :environment => deploy[:rails_env])
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/initializers/smtp.rb" do
     source "smtp.rb.erb"
     cookbook 'autonag'

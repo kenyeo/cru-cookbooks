@@ -12,6 +12,38 @@ node[:deploy].each do |application, deploy|
   node.default[:deploy][application][:database][:adapter] = OpsWorks::RailsConfiguration.determine_database_adapter(application, node[:deploy][application], "#{node[:deploy][application][:deploy_to]}/current", :force => node[:force_database_adapter_detection])
   deploy = node[:deploy][application]
 
+  directory "#{deploy[:deploy_to]}" do
+    action :create
+    recursive true
+    mode "0775"
+    group deploy[:group]
+    owner deploy[:user]
+  end
+
+  directory "#{deploy[:deploy_to]}/shared" do
+    action :create
+    recursive true
+    mode "0775"
+    group deploy[:group]
+    owner deploy[:user]
+  end
+
+  directory "#{deploy[:deploy_to]}/shared/config" do
+    action :create
+    recursive true
+    mode "0775"
+    group deploy[:group]
+    owner deploy[:user]
+  end
+
+  directory "#{deploy[:deploy_to]}/shared/config/initializers" do
+    action :create
+    recursive true
+    mode "0775"
+    group deploy[:group]
+    owner deploy[:user]
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/database.yml" do
     source "database.yml.erb"
     cookbook 'rails'
@@ -23,7 +55,7 @@ node[:deploy].each do |application, deploy|
     notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
-      deploy[:database][:host].present? && File.directory?("#{deploy[:deploy_to]}/shared/config/")
+      deploy[:database][:host]
     end
   end
 
@@ -41,7 +73,7 @@ node[:deploy].each do |application, deploy|
     notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
-      deploy[:memcached][:host].present? && File.directory?("#{deploy[:deploy_to]}/shared/config/")
+      deploy[:memcached][:host]
     end
   end
 
@@ -57,9 +89,69 @@ node[:deploy].each do |application, deploy|
     )
 
     notifies :run, "execute[restart Rails app #{application}]"
+  end
+
+  template "#{deploy[:deploy_to]}/shared/config/secrets.yml" do
+    source "secrets.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:secrets => deploy[:secrets], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
-      File.exists?("#{deploy[:deploy_to]}") && File.exists?("#{deploy[:deploy_to]}/shared/config/")
+      deploy[:secrets]
     end
   end
+
+  template "#{deploy[:deploy_to]}/shared/config/initializers/smtp.rb" do
+    source "smtp.rb.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:smtp => deploy[:smtp] || {}, :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:smtp]
+    end
+
+  end
+
+  template "#{deploy[:deploy_to]}/shared/config/settings.local.yml" do
+    source "settings.local.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:secrets => deploy[:secrets], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:secrets]
+    end
+
+  end
+
+  template "#{deploy[:deploy_to]}/shared/config/newrelic.yml" do
+    source "newrelic.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:newrelic => deploy[:newrelic], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:newrelic]
+    end
+
+  end
+
 end

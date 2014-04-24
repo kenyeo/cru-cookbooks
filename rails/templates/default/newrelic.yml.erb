@@ -15,7 +15,7 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: '<%= @secrets[:newrelic_key] %>'
+  license_key: '<%= @newrelic[:key] %>'
 
   # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
@@ -42,7 +42,7 @@ common: &default_settings
   #       - Ajax Service
   #       - All Services
   #
-  app_name: Global Registry
+  app_name: '<%= @newrelic[:app_name] %>'
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
@@ -224,5 +224,6 @@ production:
 staging:
   <<: *default_settings
   monitor_mode: true
-  app_name: Global Registry (Staging)
+  app_name: '<%= @newrelic[:app_name] %>' (Staging)
+
 

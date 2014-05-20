@@ -106,6 +106,21 @@ node[:deploy].each do |application, deploy|
     end
   end
 
+  template "#{deploy[:deploy_to]}/shared/config/redis.yml" do
+    source "redis.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:redis => deploy[:redis], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:redis][:host]
+    end
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/initializers/smtp.rb" do
     source "smtp.rb.erb"
     cookbook 'rails'

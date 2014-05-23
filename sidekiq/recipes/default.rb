@@ -11,6 +11,10 @@ node[:deploy].each do |application, deploy|
       :app_name => application,
       :deploy => deploy
     })
+
+    only_if do
+      deploy[:sidekiq][:enabled] == true
+    end
   end
 
   execute "ensure-sidekiq-is-setup-with-monit" do

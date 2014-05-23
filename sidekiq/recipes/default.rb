@@ -13,7 +13,7 @@ node[:deploy].each do |application, deploy|
     })
 
     only_if do
-      deploy[:sidekiq][:enabled] == true
+      deploy[:sidekiq] && deploy[:sidekiq][:enabled] == true
     end
   end
 

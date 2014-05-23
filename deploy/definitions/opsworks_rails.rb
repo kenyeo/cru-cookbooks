@@ -40,7 +40,7 @@ define :opsworks_rails do
     variables(:sidekiq => deploy[:sidekiq] || {}, :environment => deploy[:rails_env])
 
     only_if do
-      deploy[:sidekiq][:enabled] == true
+      deploy[:sidekiq] && deploy[:sidekiq][:enabled] == true
     end
   end
 

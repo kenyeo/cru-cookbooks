@@ -14,7 +14,7 @@ define :opsworks_rails do
     variables(:memcached => (deploy[:memcached] || {}), :environment => deploy[:rails_env])
 
     only_if do
-      deploy[:memcached][:host].present?
+      deploy[:memcached] && deploy[:memcached][:host].present?
     end
   end
 
@@ -27,7 +27,7 @@ define :opsworks_rails do
     variables(:redis => (deploy[:redis] || {}), :environment => deploy[:rails_env])
 
     only_if do
-      deploy[:redis][:host].present?
+      deploy[:redis] && deploy[:redis][:host].present?
     end
   end
 

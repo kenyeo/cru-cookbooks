@@ -70,7 +70,7 @@ node[:deploy].each do |application, deploy|
     notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
-      deploy[:redis][:host]
+      deploy[:redis] && deploy[:redis][:host]
     end
   end
   
@@ -88,7 +88,7 @@ node[:deploy].each do |application, deploy|
     notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
-      deploy[:memcached][:host]
+      deploy[:memcached] && deploy[:memcached][:host]
     end
   end
 

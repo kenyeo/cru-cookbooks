@@ -1,4 +1,4 @@
-<% (['development', 'production'] + [@environment]).uniq.each do |env| -%>
+<% (['development', 'staging', 'production'] + [@environment]).uniq.each do |env| -%>
 <%= env %>:
 <% @secrets.each do |key, value| %>
   <% if value.is_a?(Array) %>

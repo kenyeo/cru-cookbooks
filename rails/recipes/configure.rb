@@ -73,7 +73,7 @@ node[:deploy].each do |application, deploy|
       deploy[:redis] && deploy[:redis][:host]
     end
   end
-  
+
   template "#{deploy[:deploy_to]}/shared/config/memcached.yml" do
     source "memcached.yml.erb"
     cookbook 'rails'
@@ -104,6 +104,21 @@ node[:deploy].each do |application, deploy|
     )
 
     notifies :run, "execute[restart Rails app #{application}]"
+  end
+
+  template "#{deploy[:deploy_to]}/shared/config/config.yml" do
+    source "config.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:config => deploy[:config], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:secrets]
+    end
   end
 
   template "#{deploy[:deploy_to]}/shared/config/secrets.yml" do

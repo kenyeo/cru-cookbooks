@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: haproxy
+# Cookbook Name:: cpu
 # Author:: Guilhem Lettron <guilhem.lettron@youscribe.com>
 #
 # Copyright 2012, Societe Publica.
@@ -17,10 +17,10 @@
 # limitations under the License.
 #
 
-include_recipe "cpu::affinity"
-
-cpu_affinity "set affinity for haproxy" do
-  pid node['haproxy']['pid_file']
-  cpu 0
-  subscribes :set, resources("service[haproxy]"), :immediately
+case node['platform_family']
+when "debian"
+  package "util-linux"
+when "rhel"
+  package "schedutils"
 end
+  

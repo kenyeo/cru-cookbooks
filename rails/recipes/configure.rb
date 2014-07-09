@@ -6,6 +6,7 @@ node[:deploy].each do |application, deploy|
   execute "restart Rails app #{application}" do
     cwd deploy[:current_path]
     command node[:opsworks][:rails_stack][:restart_command]
+    only_if { ::File.exists?(deploy[:current_path]) }
     action :nothing
   end
 
@@ -113,6 +114,8 @@ node[:deploy].each do |application, deploy|
     group deploy[:group]
     owner deploy[:user]
     variables(:config => deploy[:config], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
       deploy[:config]

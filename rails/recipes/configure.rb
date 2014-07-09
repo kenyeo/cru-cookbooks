@@ -114,8 +114,6 @@ node[:deploy].each do |application, deploy|
     owner deploy[:user]
     variables(:config => deploy[:config], :environment => deploy[:rails_env])
 
-    notifies :run, "execute[restart Rails app #{application}]"
-
     only_if do
       deploy[:config]
     end

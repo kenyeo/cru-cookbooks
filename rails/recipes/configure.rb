@@ -117,7 +117,7 @@ node[:deploy].each do |application, deploy|
     notifies :run, "execute[restart Rails app #{application}]"
 
     only_if do
-      deploy[:secrets]
+      deploy[:config]
     end
   end
 

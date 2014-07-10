@@ -1,4 +1,5 @@
-site :opscode
+#site :opscode
+http://api.berkshelf.com
 
 cookbook 'mongodb'
 cookbook 'git'

@@ -43,7 +43,7 @@ user node['errbit']['user'] do
   gid node['errbit']['group']
   shell '/bin/bash'
   home "/home/#{node['errbit']['user']}"
-  password node['errbit']['password']
+#  password node['errbit']['password']
   supports :manage_home => true
   system true
 end
@@ -104,17 +104,26 @@ deploy_revision node['errbit']['deploy_to'] do
   migrate false
   before_migrate do
 
-    directory "#{release_path}/vendor" do
+    directory "#{node['errbit']['deploy_to']}/shared/vendor_bundle" do
         mode 00644
         action :create
         recursive true
     end
 
-    link "#{release_path}/vendor/bundle" do
-      to "#{node['errbit']['deploy_to']}/shared/vendor_bundle"
+    ruby_block "insert_line" do
+      block do
+        file = Chef::Util::FileEdit.new("#{release_path}/Gemfile")
+        file.insert_line_if_no_match("/rake/", "gem 'rake'")
+        file.write_file
+        end
+    end
+
+    link "#{node['errbit']['deploy_to']}/shared/vendor_bundle/ruby" do
+      to "/opt/aws/opsworks/local/lib/ruby"
     end
     common_groups = %w{development test cucumber staging production}
-    execute "bundle install --deployment --without #{(common_groups - ([node['errbit']['environment']])).join(' ')}" do
+
+    execute "bundle install --without #{(common_groups - ([node['errbit']['environment']])).join(' ')}" do
       ignore_failure true
       cwd release_path
     end

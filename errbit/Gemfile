@@ -6,4 +6,4 @@ gem 'fauxhai'
 gem 'foodcritic'
 gem 'minitest-chef-handler'
 gem 'strainer'
-gem 'rake'
+

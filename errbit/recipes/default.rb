@@ -103,9 +103,10 @@ deploy_revision node['errbit']['deploy_to'] do
   enable_submodules false
   migrate false
  
-    common_groups = %w{development test cucumber staging production}   execute "bundle install --deployment --without #{(common_groups - ([node['errbit']['environment']])).join(' ')}" do
+    common_groups = %w{development test cucumber staging production}   
+    execute "bundle install --deployment --without #{(common_groups - ([node['errbit']['environment']])).join(' ')}" do
       ignore_failure true
-      cwd node['errbit']['deploy_to'] do
+      cwd node['errbit']['deploy_to']
     end
   end
 

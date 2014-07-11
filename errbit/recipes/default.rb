@@ -102,14 +102,10 @@ deploy_revision node['errbit']['deploy_to'] do
   group node['errbit']['group']
   enable_submodules false
   migrate false
-  before_migrate do
-    link "#{release_path}/vendor/bundle" do
-      to "#{node['errbit']['deploy_to']}/shared/vendor_bundle"
-    end
-    common_groups = %w{development test cucumber staging production}
-    execute "bundle install --deployment --without #{(common_groups - ([node['errbit']['environment']])).join(' ')}" do
+ 
+    common_groups = %w{development test cucumber staging production}   execute "bundle install --deployment --without #{(common_groups - ([node['errbit']['environment']])).join(' ')}" do
       ignore_failure true
-      cwd release_path
+      cwd node['errbit']['deploy_to'] do
     end
   end
 

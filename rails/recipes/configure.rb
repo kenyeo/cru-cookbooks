@@ -122,6 +122,21 @@ node[:deploy].each do |application, deploy|
     end
   end
 
+  template "#{deploy[:deploy_to]}/shared/config/amazon_s3.yml" do
+    source "amazon_s3.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:s3 => deploy[:s3], :environment => deploy[:rails_env])
+
+    notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:s3]
+    end
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/secrets.yml" do
     source "secrets.yml.erb"
     cookbook 'rails'

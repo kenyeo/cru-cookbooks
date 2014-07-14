@@ -1,9 +1,10 @@
 source "https://api.berkshelf.com"
-
+#site :opscode
 metadata
 
-def custom_cookbook(name, version = '>= 0.0.0', options = {})
-  cookbook name, github: 'lokerd/cru-testing', branch: 'master', rel: name 
-end
-
-custom_cookbook 'chef-errbit-master'
+cookbook  "mongodb"
+cookbook  "git"
+cookbook  "unicorn"
+cookbook  "apt"
+cookbook  "nginx"
+cookbook  "build-essential"

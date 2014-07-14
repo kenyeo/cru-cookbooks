@@ -1,7 +1,7 @@
 include_recipe "deploy"
 
 node[:deploy].each do |application, deploy|
-  deploy = node[:deploy][application]
+  next if node[:current_app] && node[:current_app] != application
 
   execute "restart Rails app #{application}" do
     cwd deploy[:current_path]
@@ -105,6 +105,10 @@ node[:deploy].each do |application, deploy|
     )
 
     notifies :run, "execute[restart Rails app #{application}]"
+
+    only_if do
+      deploy[:sidekiq] && deploy[:sidekiq][:enabled]
+    end
   end
 
   template "#{deploy[:deploy_to]}/shared/config/config.yml" do

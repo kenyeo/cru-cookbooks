@@ -44,6 +44,19 @@ define :opsworks_rails do
     end
   end
 
+  template "#{deploy[:deploy_to]}/shared/config/config.yml" do
+    source "config.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:config => deploy[:config], :environment => deploy[:rails_env])
+
+    only_if do
+      deploy[:config]
+    end
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/secrets.yml" do
     source "secrets.yml.erb"
     cookbook 'rails'

@@ -54,7 +54,7 @@ PassengerPreStart http://<%= @params[:server_name] %>/
 
   RewriteEngine On
   <% if @params[:rewrite_config] && @params[:rewrite_config] != '' %>
-  Include <%= @params[:rewrite_config] %>*
+  IncludeOptional <%= @params[:rewrite_config] %>*
   <% end %>
   RewriteLog <%= node[:apache][:log_dir] %>/<%= @application_name %>-rewrite.log
   RewriteLogLevel 0
@@ -125,7 +125,7 @@ PassengerPreStart http://<%= @params[:server_name] %>/
 
   RewriteEngine On
   <% if @params[:rewrite_config] && @params[:rewrite_config] != '' %>
-  Include <%= @params[:rewrite_config] %>-ssl*
+  IncludeOptional <%= @params[:rewrite_config] %>-ssl*
   <% end %>
   RewriteLog <%= node[:apache][:log_dir] %>/<%= @application_name %>-ssl-rewrite.log
   RewriteLogLevel 0

@@ -8,7 +8,7 @@ end
 
 haproxy = node['haproxy']
 app_names = []
-%(rails_applications php_applications nodejs_applications java_applications static_applications).each do |layer|
+%w(rails_applications php_applications nodejs_applications java_applications static_applications).each do |layer|
   app_names += haproxy[layer].keys if haproxy[layer]
 end
 app_names.each do |app_name|

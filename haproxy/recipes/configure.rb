@@ -7,8 +7,11 @@ directory '/etc/haproxy/certs.d' do
 end
 
 haproxy = node['haproxy']
-(haproxy['rails_applications'].keys + haproxy['php_backends'].keys + haproxy['nodejs_applications'].keys +
- haproxy['java_applications'].keys + haproxy['static_applications'].keys).each do |app_name|
+app_names = []
+%(rails_applications php_applications nodejs_applications java_applications static_applications).each do |layer|
+  app_names += haproxy[layer].keys if haproxy[layer]
+end
+app_names.each do |app_name|
   app = node['deploy'][app_name]
   if app['ssl_support']
     app['domains'].each do |domain|

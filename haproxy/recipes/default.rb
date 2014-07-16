@@ -8,6 +8,7 @@ end
 
 package 'haproxy' do
   action :install
+  options '--force-yes'
 end
 
 if platform?('debian','ubuntu')

@@ -1,5 +1,6 @@
 <%= @params[:environment] %>:
   sessions:
     default:
-      hosts: localhost
+      hosts: 
+        - localhost
       database: <%= @params[:database] %>

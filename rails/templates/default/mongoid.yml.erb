@@ -1,0 +1,12 @@
+<% (['development', 'staging', 'production'] + [@environment]).uniq.each do |env| -%>
+<%= env %>:
+  sessions:
+    default:
+      database: <%= @mongoid['database'] %>
+      hosts:
+        - <%= @mongoid['host'] %>:27017
+  options:
+    identity_map_enabled: true
+    use_utc: true
+<% end %>
+

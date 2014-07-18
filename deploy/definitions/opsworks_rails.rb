@@ -57,6 +57,19 @@ define :opsworks_rails do
     end
   end
 
+  template "#{deploy[:deploy_to]}/shared/config/mongoid.yml" do
+    source "mongoid.yml.erb"
+    cookbook 'rails'
+    mode "0660"
+    group deploy[:group]
+    owner deploy[:user]
+    variables(:mongoid => deploy[:mongoid], :environment => deploy[:rails_env])
+
+    only_if do
+      deploy[:mongoid]
+    end
+  end
+
   template "#{deploy[:deploy_to]}/shared/config/secrets.yml" do
     source "secrets.yml.erb"
     cookbook 'rails'

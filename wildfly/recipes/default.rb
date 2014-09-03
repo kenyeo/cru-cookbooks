@@ -21,7 +21,7 @@ execute 'chown-wildfly' do
   command 'chown -R wildfly:wildfly /opt/wildfly-' + node['wildfly']['version']
 end
 
-execute do
+execute 'rename-directory-remove-version' do
   command 'mv /opt/wildfly-' + node['wildfly']['version'] + ' /opt/wildfly'
 end
 

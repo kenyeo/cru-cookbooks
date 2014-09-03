@@ -18,13 +18,13 @@ template "/tmp/wildfly-service.sh" do
 end
 
 directory 'log-directory' do
-  path '/opt/wildfly-' + node['wildfly']['version'] + '/standalone/log'
+  path '/opt/wildfly/standalone/log'
   owner 'wildfly'
   group 'wildfly'
 end
 
 directory 'data-directory' do
-  path '/opt/wildfly-' + node['wildfly']['version'] + '/standalone/data'
+  path '/opt/wildfly/standalone/data'
   owner 'wildfly'
   group 'wildfly'
 end

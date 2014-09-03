@@ -1,12 +1,10 @@
 #Adapted from script by Dmitriy Sukharev on 2013-12-22 by Ryan Carlson on 2014-1-31
 
 WILDFLY_VERSION=<%= node[:wildfly][:version] %>
-WILDFLY_FILENAME=wildfly-$WILDFLY_VERSION
-WILDFLY_ARCHIVE_NAME=$WILDFLY_FILENAME.tar.gz
+WILDFLY_FILENAME=wildfly
+WILDFLY_ARCHIVE_NAME=$WILDFLY_FILENAME-<%= node[:wildfly][:version] %>.tar.gz
 
-INSTALL_DIR=/opt
-WILDFLY_FULL_DIR=$INSTALL_DIR/$WILDFLY_FILENAME
-WILDFLY_DIR=$INSTALL_DIR/wildfly-$WILDFLY_VERSION
+WILDFLY_DIR_DIR=/opt/$WILDFLY_FILENAME
 
 WILDFLY_USER=<%= node[:wildfly][:user]%>
 WILDFLY_SERVICE=<%= node[:wildfly][:service_name]%>
@@ -15,7 +13,6 @@ WILDFLY_STARTUP_TIMEOUT=240
 WILDFLY_SHUTDOWN_TIMEOUT=30
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 
 echo "Cleaning up..."
 
@@ -90,5 +87,6 @@ fi
 
 echo "Configuring application server..."
 sed -i -e 's,<inet-address value="${jboss.bind.address:127.0.0.1}"/>,<inet-address value="${jboss.bind.address:0.0.0.0}"/>,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
-
+sed -i -e 's,<inet-address value="${jboss.bind.address.management:127.0.0.1}"/>,<inet-address value="${jboss.bind.address.management:0.0.0.0}"/>,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
+sed -i -e 's,<http-listener name="default" socket-binding="http"/>, <http-listener name="default" socket-binding="http" proxy-address-forwarding="true"/>' $WILDFLY_DIR/standalone/configuration/standalone.xml
 echo "Done."

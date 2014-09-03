@@ -4,7 +4,7 @@ WILDFLY_VERSION=<%= node[:wildfly][:version] %>
 WILDFLY_FILENAME=wildfly
 WILDFLY_ARCHIVE_NAME=$WILDFLY_FILENAME-<%= node[:wildfly][:version] %>.tar.gz
 
-WILDFLY_DIR_DIR=/opt/$WILDFLY_FILENAME
+WILDFLY_DIR=/opt/$WILDFLY_FILENAME
 
 WILDFLY_USER=<%= node[:wildfly][:user]%>
 WILDFLY_SERVICE=<%= node[:wildfly][:service_name]%>

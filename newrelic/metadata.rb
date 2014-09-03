@@ -10,8 +10,6 @@ version '1.0.6'
   supports os
 end
 
-depends 'python'
-
 recommends 'php'
 recommends 'ms_dotnet4'
 recommends 'curl'

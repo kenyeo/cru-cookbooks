@@ -13,7 +13,11 @@ execute 'deploy-from-jenkins' do
   }
 
   json = Hash.new()
-  json['parameter'] = Array.(environment,ip,password,database_migration)
+  json['parameter'] = Array.new()
+  json['parameter'].push(environment)
+  json['parameter'].push(ip)
+  json['parameter'].push(password)
+  json['parameter'].push(database_migration)
 
   command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d token=' + node['crs-api']['continuous-integration']['api-token'] + ' --data-urlencode json="' + json + '"'
 end

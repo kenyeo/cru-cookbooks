@@ -1,4 +1,8 @@
+chef_gem 'json'
+
 execute 'deploy-from-jenkins' do
+  require 'json'
+
   environment = {
       :name => 'targetEnvironment', :value => node['crs-api']['continuous-integration']['environment']
   }
@@ -19,8 +23,8 @@ execute 'deploy-from-jenkins' do
   json['parameter'].push(password)
   json['parameter'].push(database_migration)
 
-  puts(json.to_json)
-  puts('curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d token=' + node['crs-api']['continuous-integration']['api-token'] + ' -d json=' + json.to_json)
-  command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d token=' + node['crs-api']['continuous-integration']['api-token'] + ' -d json=' + json.to_json
+  puts(JSON.generate(json, quirks_mode: true))
+  puts('curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + JSON.generate(json, quirks_mode: true))
+  command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + JSON.generate(json, quirks_mode: true)
   :run
 end

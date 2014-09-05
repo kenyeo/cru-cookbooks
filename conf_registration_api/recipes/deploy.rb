@@ -15,9 +15,9 @@ def json
 
   json['parameter'] = Array.(environment,ip,password,database_migration)
 
-  puts(json)
 end
 
 execute 'deploy-from-jenkins' do
+  puts(json)
   command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d token=' + node['crs-api']['continuous-integration']['api-token'] + ' --data-urlencode json="' + json + '"'
 end

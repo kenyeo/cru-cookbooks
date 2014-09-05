@@ -23,8 +23,8 @@ execute 'deploy-from-jenkins' do
   json['parameter'].push(password)
   json['parameter'].push(database_migration)
 
-  puts(JSON.generate(json, quirks_mode: true))
-  puts('curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + JSON.generate(json, quirks_mode: true))
-  command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + JSON.generate(json, quirks_mode: true)
+  puts(%Q[JSON.generate(json, quirks_mode: true)])
+  puts('curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + %Q[JSON.generate(json, quirks_mode: true)])
+  command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + %Q[JSON.generate(json, quirks_mode: true])
   :run
 end

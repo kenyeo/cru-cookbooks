@@ -1,14 +1,19 @@
-execute 'deploy-from-jenkins' do
+chef_gem 'jenkins_api_client'
 
-  environment = "{\"name\": \"targetEnvironment\", \"value\" : \"" + node['crs-api']['continuous-integration']['environment'] + "\"}"
-  ip = "{\"name\": \"targetServerIP\", \"value\" : \"" + node['opsworks']['instance']['private_ip'] + "\"}"
-  password = "{\"name\": \"deployerPassword\", \"value\" : \"" + node['wildfly']['deploy_password'] + "\"}"
-  database_migration = "{\"name\": \"databaseMigration\", \"value\" : \"" + node['crs-api']['continuous-integration']['database-migration'] + "\"}"
+ruby_block 'deploy-from-jenkins' do
+  require 'jenkins_api_client'
 
-  json = "{ \"parameter\" :[" + environment + ',' + ip + ',' + password + ',' + database_migration + ']}'
+  # these variables have not been checked against the stack settings!!
+  
+  @client = JenkinsApi::Client.new(:server_ip => node['crs-api']['continuous_integration']['hostname'],
+                                   :username => node['crs-api']['continuous_integration']['username'],
+                                   :password => node['crs-api']['continuous_integration']['password'])
 
-  puts(json)
-  puts('curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + json)
-  command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + json
-  :run
+  job_params = Hash.new()
+  job_params['targetEnvironment'] = node['crs-api']['continuous_integration']['target_environment']
+  job_params['targetServerIP'] = node['opsworks']['instance']['private_ip']
+  job_params['databaseMigration'] = node['crs-api']['continuous_integration']['database_migration']
+  job_params['deployerPassword'] = node['crs-api']['wildfly']['deploy_password']
+
+  @client.job.build(node['crs-api']['continuous_integration']['job_name'], job_params, {})
 end

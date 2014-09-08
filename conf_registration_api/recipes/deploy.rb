@@ -13,7 +13,7 @@ ruby_block 'deploy-from-jenkins' do
   job_params['targetEnvironment'] = node['crs-api']['continuous_integration']['target_environment']
   job_params['targetServerIP'] = node['opsworks']['instance']['private_ip']
   job_params['databaseMigration'] = node['crs-api']['continuous_integration']['database_migration']
-  job_params['deployerPassword'] = node['crs-api']['wildfly']['deploy_password']
+  job_params['deployerPassword'] = node['wildfly']['deploy_password']
 
   @client.job.build(node['crs-api']['continuous_integration']['job_name'], job_params, {})
 end

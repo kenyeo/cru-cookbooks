@@ -14,4 +14,6 @@ ruby_block 'deploy-from-jenkins' do
   job_params['deployerPassword'] = node['wildfly']['deploy_password']
 
   @client.job.build(node['crs-api']['continuous_integration']['job_name'], job_params, {})
+
+  action :nothing
 end

@@ -1,30 +1,19 @@
-chef_gem 'json'
+chef_gem 'jenkins_api_client'
 
-execute 'deploy-from-jenkins' do
-  require 'json'
+ruby_block 'deploy-from-jenkins' do
+  require 'jenkins_api_client'
 
-  environment = {
-      :name => 'targetEnvironment', :value => node['crs-api']['continuous-integration']['environment']
-  }
-  ip = {
-      :name => 'targetServerIP', :value => node['opsworks']['instance']['private_ip']
-  }
-  password = {
-      :name => 'deployerPassword', :value => node['wildfly']['deploy_password']
-  }
-  database_migration = {
-      :name => 'databaseMigration', :value => node['crs-api']['continuous-integration']['database-migration']
-  }
+  @client = JenkinsApi::Client.new(:server_ip => node['crs-api']['continuous_integration']['hostname'],
+                                   :username => node['crs-api']['continuous_integration']['username'],
+                                   :password => node['crs-api']['continuous_integration']['password'])
 
-  json = Hash.new()
-  json['parameter'] = Array.new()
-  json['parameter'].push(environment)
-  json['parameter'].push(ip)
-  json['parameter'].push(password)
-  json['parameter'].push(database_migration)
+  job_params = Hash.new()
+  job_params['targetEnvironment'] = node['crs-api']['continuous_integration']['target_environment']
+  job_params['targetServerIP'] = node['opsworks']['instance']['private_ip']
+  job_params['databaseMigration'] = node['crs-api']['continuous_integration']['database_migration']
+  job_params['deployerPassword'] = node['wildfly']['deploy_password']
 
-  puts(%Q[JSON.generate(json, quirks_mode: true)])
-  puts('curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + %Q[JSON.generate(json, quirks_mode: true)])
-  command 'curl -X POST ' + node['crs-api']['continuous-integration']['build-url'] + ' -d json=' + %Q[JSON.generate(json, quirks_mode: true])
-  :run
+  @client.job.build(node['crs-api']['continuous_integration']['job_name'], job_params, {})
+
+  action :nothing
 end

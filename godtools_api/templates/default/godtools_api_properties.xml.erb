@@ -13,6 +13,10 @@
     <entry key="errbitApiKey"><%= node['godtools']['errbit_api_key'] %></entry>
     <entry key="errbitEnvironment"><%= node['godtools']['errbit_environment'] %></entry>
 
+    <entry key="memcachedEnabled"><%= node['godtools']['memcached_enabled'] %></entry>
+    <entry key="memcachedHost"><%= node['opsworks']['layers']['memcached']['instances']['memcached1']['private_ip'] %></entry>
+    <entry key="memcachedPort"><%= node['godtools']['memcached_port'] %></entry>
+
     <entry key="mode">debug</entry>
 
 </properties>

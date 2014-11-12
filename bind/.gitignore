@@ -1,7 +1,0 @@
-#metadata
-metadata.json
-
-#exclude stoopid zone files here
-named.som
-named.rcbi
-named.rti.local

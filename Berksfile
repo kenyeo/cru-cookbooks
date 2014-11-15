@@ -7,6 +7,6 @@ cookbook  "git"
 cookbook  "unicorn"
 cookbook  "apt"
 cookbook  "nginx"
-cookbook  "build-essential
+cookbook  "build-essential"
 cookbook  "newrelic"
 
